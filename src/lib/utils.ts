@@ -8,3 +8,15 @@ export function cn(...inputs: ClassValue[]) {
 export async function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
+
+export function formatCurrency(
+  price: number | string = 0,
+  currency: string = "CZK",
+) {
+  return Intl.NumberFormat("cs", {
+    style: "currency",
+    currency,
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(Number(price));
+}
