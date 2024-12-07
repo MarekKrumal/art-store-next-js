@@ -1,17 +1,16 @@
-import Image from "next/image";
 import banner from "@/assets/banner.jpg";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
-import { delay } from "@/lib/utils";
-import { Suspense } from "react";
-import { getWixClient } from "@/lib/wix-client.base";
 import Product from "@/components/Product";
+import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { delay } from "@/lib/utils";
 import { getCollectionBySlug } from "@/wix-api/collections";
-import { queryProdcuts } from "@/wix-api/products";
+import { queryProducts } from "@/wix-api/products";
+import { ArrowRight } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { Suspense } from "react";
 
-export default function page() {
+export default function Home() {
   return (
     <main className="mx-auto max-w-7xl space-y-10 px-5 py-10">
       <div className="flex items-center bg-secondary md:h-96">
@@ -30,8 +29,12 @@ export default function page() {
           </Button>
         </div>
         <div className="relative hidden h-full w-1/2 md:block">
-          <Image src={banner} alt="banner" className="h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-r from-secondary via-transparent to-transparent"></div>
+          <Image
+            src={banner}
+            alt="Flow Shop banner"
+            className="h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-secondary via-transparent to-transparent" />
         </div>
       </div>
       <Suspense fallback={<LoadingSkeleton />}>
@@ -50,7 +53,7 @@ async function FeaturedProducts() {
     return null;
   }
 
-  const featuredProducts = await queryProdcuts({
+  const featuredProducts = await queryProducts({
     collectionIds: collection._id,
   });
 
@@ -60,8 +63,8 @@ async function FeaturedProducts() {
 
   return (
     <div className="space-y-5">
-      <h2 className="text-2xl font-bold">featured products</h2>
-      <div className="grid-cols2 flex gap-5 sm:grid md:grid-cols-3 lg:grid-cols-4">
+      <h2 className="text-2xl font-bold">Featured Products</h2>
+      <div className="flex grid-cols-2 flex-col gap-5 sm:grid md:grid-cols-3 lg:grid-cols-4">
         {featuredProducts.items.map((product) => (
           <Product key={product._id} product={product} />
         ))}
@@ -69,9 +72,10 @@ async function FeaturedProducts() {
     </div>
   );
 }
+
 function LoadingSkeleton() {
   return (
-    <div className="grid-cols2 flex gap-5 p-12 sm:grid md:grid-cols-3 lg:grid-cols-4">
+    <div className="flex grid-cols-2 flex-col gap-5 pt-12 sm:grid md:grid-cols-3 lg:grid-cols-4">
       {Array.from({ length: 8 }).map((_, i) => (
         <Skeleton key={i} className="h-[26rem] w-full" />
       ))}

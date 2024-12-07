@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
-import { ImgHTMLAttributes } from "react";
+
 import { media as wixMedia } from "@wix/sdk";
+import { ImgHTMLAttributes } from "react";
 
 type WixImageProps = Omit<
   ImgHTMLAttributes<HTMLImageElement>,

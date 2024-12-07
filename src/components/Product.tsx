@@ -1,9 +1,9 @@
+import { formatCurrency } from "@/lib/utils";
 import { products } from "@wix/stores";
 import Link from "next/link";
+import DiscountBadge from "./DiscountBadge";
 import WixImage from "./WixImage";
 import Badge from "./ui/badge";
-import { formatCurrency } from "@/lib/utils";
-import DiscountBadge from "./DiscountBadge";
 
 interface ProductProps {
   product: products.Product;
@@ -13,7 +13,7 @@ export default function Product({ product }: ProductProps) {
   const mainImage = product.media?.mainMedia?.image;
 
   return (
-    <Link href={`/products/${product._id}`} className="h-full border bg-card">
+    <Link href={`/products/${product.slug}`} className="h-full border bg-card">
       <div className="relative overflow-hidden">
         <WixImage
           mediaIdentifier={mainImage?.url}
@@ -25,7 +25,7 @@ export default function Product({ product }: ProductProps) {
         <div className="absolute bottom-3 right-3 flex flex-wrap items-center gap-2">
           {product.ribbon && <Badge>{product.ribbon}</Badge>}
           {product.discount && <DiscountBadge data={product.discount} />}
-          <Badge className="bg-secondary font-semibold">
+          <Badge className="bg-secondary font-semibold text-secondary-foreground">
             {getFormattedPrice(product)}
           </Badge>
         </div>
@@ -35,7 +35,7 @@ export default function Product({ product }: ProductProps) {
         <div
           className="line-clamp-5"
           dangerouslySetInnerHTML={{ __html: product.description || "" }}
-        ></div>
+        />
       </div>
     </Link>
   );
