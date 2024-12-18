@@ -2,7 +2,6 @@ import { delay } from "@/lib/utils";
 import { getWixServerClient } from "@/lib/wix-client.server";
 import { queryProducts } from "@/wix-api/products";
 import { Metadata } from "next";
-import NotFound from "../not-found";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import Product from "@/components/Product";
@@ -13,6 +12,7 @@ interface PageProps {
   searchParams: {
     q?: string;
     page?: string;
+    collection?: string[];
   };
 }
 
@@ -23,32 +23,31 @@ export function generateMetadata({ searchParams: { q } }: PageProps): Metadata {
 }
 
 export default async function Page({
-  searchParams: { q, page = "1" },
+  searchParams: { q, page = "1", collection: collectionIds },
 }: PageProps) {
   const title = q ? `Results for "${q}"` : "Products";
 
   return (
-    <main className="flex flex-col items-center justify-center gap-10 p-10 px-5 lg:flex-row lg:items-start">
-      <div>filter sidebar</div>
-      <div className="w-full max-w-7xl space-y-5">
-        <div className="flex justify-center lg:justify-end">sort filter</div>
-        <div className="space-y-10">
-          <h1 className="text-center text-3xl md:text-4xl">{title}</h1>
-          <Suspense fallback={<LoadingSkeleton />} key={`${q}-${page}`}>
-            <ProductResult q={q} page={parseInt(page)} />
-          </Suspense>
-        </div>
-      </div>
-    </main>
+    <div className="space-y-10">
+      <h1 className="text-center text-3xl md:text-4xl">{title}</h1>
+      <Suspense fallback={<LoadingSkeleton />} key={`${q}-${page}`}>
+        <ProductResult
+          q={q}
+          page={parseInt(page)}
+          collectionIds={collectionIds}
+        />
+      </Suspense>
+    </div>
   );
 }
 
 interface ProductResultsProps {
   q?: string;
   page: number;
+  collectionIds?: string[];
 }
 
-async function ProductResult({ q, page }: ProductResultsProps) {
+async function ProductResult({ q, page, collectionIds }: ProductResultsProps) {
   await delay(3000);
 
   const pageSize = 8;
@@ -57,11 +56,13 @@ async function ProductResult({ q, page }: ProductResultsProps) {
     q,
     limit: pageSize,
     skip: (page - 1) * pageSize,
+    collectionIds,
   });
+
   if (page > (products.totalPages || 1)) notFound();
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-10 group-has-[[data-pending]]:animate-pulse">
       <p className="text-center text-xl">
         {products.totalCount}{" "}
         {products.totalCount === 1 ? "products" : "products"} found

@@ -7,7 +7,7 @@ export default function Footer() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 gap-x-12 gap-y-16 md:col-span-3 lg:grid-cols-6">
           <div className="col-span-2 md:col-span-3 lg:col-span-2 lg:pr-8">
-            <div className="text-2xl font-bold">Flow Shop</div>
+            <div className="text-2xl font-bold">Raven Shop</div>
             <p className="mt-7 text-base leading-relaxed text-muted-foreground">
               Raven Shop – dark art that blends mystery, elegance, and the
               beauty of the night. Discover unique creations crafted with care,
